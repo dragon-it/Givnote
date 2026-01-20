@@ -677,11 +677,9 @@ export default function Home() {
         <header className="flex flex-col gap-6">
           <div className="flex flex-wrap items-center gap-3">
             <div className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">
-              givenote
+              GiveNote
             </div>
-            <span className="text-sm text-slate-600">
-              하객 및 축의금 관리
-            </span>
+            <span className="text-sm text-slate-600">하객 및 축의금 관리</span>
           </div>
           <div className="flex flex-wrap gap-3">
             {sideOptions.map((side) => {
@@ -706,7 +704,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight">
-                givenote
+                GiveNote
               </h1>
               <p className="text-sm text-slate-600">
                 행사별 명단을 관리하고 엑셀 또는 CSV로 내보내기.
@@ -973,139 +971,139 @@ export default function Home() {
                   <div className="text-xs text-red-500">{inlineError}</div>
                 ) : null}
               </div>
-            <div className="mt-3 grid gap-2 lg:grid-cols-[1.1fr_0.8fr_0.9fr_0.8fr_0.9fr_1.2fr_auto]">
-              <div className="grid gap-1">
-                <span className="text-[11px] font-medium text-slate-600">
-                  이름
-                </span>
-                <Input
-                  key="inline-name"
-                  placeholder="이름"
-                  ref={nameInputRef}
-                  value={inlineForm.name}
-                  onChange={(event) =>
-                    setInlineForm((prev) => ({
-                      ...prev,
-                      name: event.target.value,
-                    }))
-                  }
-                  onKeyDown={handleInlineKeyDown}
-                />
+              <div className="mt-3 grid gap-2 lg:grid-cols-[1.1fr_0.8fr_0.9fr_0.8fr_0.9fr_1.2fr_auto]">
+                <div className="grid gap-1">
+                  <span className="text-[11px] font-medium text-slate-600">
+                    이름
+                  </span>
+                  <Input
+                    key="inline-name"
+                    placeholder="이름"
+                    ref={nameInputRef}
+                    value={inlineForm.name}
+                    onChange={(event) =>
+                      setInlineForm((prev) => ({
+                        ...prev,
+                        name: event.target.value,
+                      }))
+                    }
+                    onKeyDown={handleInlineKeyDown}
+                  />
+                </div>
+                <div className="grid gap-1">
+                  <span className="text-[11px] font-medium text-slate-600">
+                    금액
+                  </span>
+                  <Input
+                    key="inline-amount"
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="금액"
+                    value={inlineForm.amount}
+                    onChange={(event) =>
+                      setInlineForm((prev) => ({
+                        ...prev,
+                        amount: event.target.value,
+                      }))
+                    }
+                    onKeyDown={handleInlineKeyDown}
+                  />
+                </div>
+                <div className="grid gap-1">
+                  <span className="text-[11px] font-medium text-slate-600">
+                    관계
+                  </span>
+                  <Select
+                    key="inline-relation"
+                    value={inlineForm.relation || undefined}
+                    onValueChange={(value) =>
+                      setInlineForm((prev) => ({ ...prev, relation: value }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="관계" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {relations.map((relation) => (
+                        <SelectItem key={relation} value={relation}>
+                          {relation}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-1">
+                  <span className="text-[11px] font-medium text-slate-600">
+                    인원 수
+                  </span>
+                  <Input
+                    key="inline-companions"
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="인원 수"
+                    value={inlineForm.companions}
+                    onChange={(event) =>
+                      setInlineForm((prev) => ({
+                        ...prev,
+                        companions: event.target.value,
+                      }))
+                    }
+                    onKeyDown={handleInlineKeyDown}
+                  />
+                </div>
+                <div className="grid gap-1">
+                  <span className="text-[11px] font-medium text-slate-600">
+                    전달방식
+                  </span>
+                  <Select
+                    key="inline-payment-method"
+                    value={inlineForm.paymentMethod || undefined}
+                    onValueChange={(value) =>
+                      setInlineForm((prev) => ({
+                        ...prev,
+                        paymentMethod: value,
+                      }))
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="전달 방식" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {paymentMethods.map((method) => (
+                        <SelectItem key={method} value={method}>
+                          {method}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-1">
+                  <span className="text-[11px] font-medium text-slate-600">
+                    메모
+                  </span>
+                  <Input
+                    key="inline-memo"
+                    placeholder="메모"
+                    value={inlineForm.memo}
+                    onChange={(event) =>
+                      setInlineForm((prev) => ({
+                        ...prev,
+                        memo: event.target.value,
+                      }))
+                    }
+                    onKeyDown={handleInlineKeyDown}
+                  />
+                </div>
+                <div className="grid items-end">
+                  <Button
+                    type="button"
+                    onClick={handleInlineAdd}
+                    disabled={!selectedEventId}
+                  >
+                    추가
+                  </Button>
+                </div>
               </div>
-              <div className="grid gap-1">
-                <span className="text-[11px] font-medium text-slate-600">
-                  금액
-                </span>
-                <Input
-                  key="inline-amount"
-                  type="number"
-                  inputMode="numeric"
-                  placeholder="금액"
-                  value={inlineForm.amount}
-                  onChange={(event) =>
-                    setInlineForm((prev) => ({
-                      ...prev,
-                      amount: event.target.value,
-                    }))
-                  }
-                  onKeyDown={handleInlineKeyDown}
-                />
-              </div>
-              <div className="grid gap-1">
-                <span className="text-[11px] font-medium text-slate-600">
-                  관계
-                </span>
-                <Select
-                  key="inline-relation"
-                  value={inlineForm.relation || undefined}
-                  onValueChange={(value) =>
-                    setInlineForm((prev) => ({ ...prev, relation: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="관계" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {relations.map((relation) => (
-                      <SelectItem key={relation} value={relation}>
-                        {relation}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid gap-1">
-                <span className="text-[11px] font-medium text-slate-600">
-                  인원 수
-                </span>
-                <Input
-                  key="inline-companions"
-                  type="number"
-                  inputMode="numeric"
-                  placeholder="인원 수"
-                  value={inlineForm.companions}
-                  onChange={(event) =>
-                    setInlineForm((prev) => ({
-                      ...prev,
-                      companions: event.target.value,
-                    }))
-                  }
-                  onKeyDown={handleInlineKeyDown}
-                />
-              </div>
-              <div className="grid gap-1">
-                <span className="text-[11px] font-medium text-slate-600">
-                  전달방식
-                </span>
-                <Select
-                  key="inline-payment-method"
-                  value={inlineForm.paymentMethod || undefined}
-                  onValueChange={(value) =>
-                    setInlineForm((prev) => ({
-                      ...prev,
-                      paymentMethod: value,
-                    }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="전달 방식" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {paymentMethods.map((method) => (
-                      <SelectItem key={method} value={method}>
-                        {method}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid gap-1">
-                <span className="text-[11px] font-medium text-slate-600">
-                  메모
-                </span>
-                <Input
-                  key="inline-memo"
-                  placeholder="메모"
-                  value={inlineForm.memo}
-                  onChange={(event) =>
-                    setInlineForm((prev) => ({
-                      ...prev,
-                      memo: event.target.value,
-                    }))
-                  }
-                  onKeyDown={handleInlineKeyDown}
-                />
-              </div>
-              <div className="grid items-end">
-                <Button
-                  type="button"
-                  onClick={handleInlineAdd}
-                  disabled={!selectedEventId}
-                >
-                  추가
-                </Button>
-              </div>
-            </div>
             </div>
           </div>
 

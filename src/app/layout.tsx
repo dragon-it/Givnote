@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "축의금 명단 관리",
+  title: "GiveNote",
   description: "로컬 저장 기반 축의금 명단과 엑셀 내보내기",
 };
 
