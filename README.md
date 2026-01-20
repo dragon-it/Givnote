@@ -1,5 +1,5 @@
 # GiveNote
-
+이제 엑셀 서식 없이 편하게 명단을 관리하세요 !
 이 프로젝트는 [Next.js](https://nextjs.org)로 만들었고 [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app)으로 초기화했습니다.
 
 ## 바이브 코딩
