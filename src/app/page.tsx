@@ -12,7 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLiveQuery } from "dexie-react-hooks";
 import dayjs from "dayjs";
-import * as XLSX from "xlsx";
+import * as XLSX from "xlsx-js-style";
 import {
   ColumnDef,
   flexRender,
@@ -99,7 +99,6 @@ const formatMoney = (value: number) => value.toLocaleString("ko-KR");
 
 type ExportRow = {
   번호: number | string;
-  날짜: string;
   이름: string;
   금액: number | string;
   인원수: number | string;
@@ -626,7 +625,6 @@ export default function Home() {
 
   const makeEmptyRow = (): ExportRow => ({
     번호: "",
-    날짜: "",
     이름: "",
     금액: "",
     인원수: "",
@@ -637,7 +635,6 @@ export default function Home() {
 
     return filteredRecords.map((record, index) => ({
       번호: index + 1,
-      날짜: selectedEvent.date,
       이름: record.name,
       금액: record.amount,
       인원수: record.companions ?? 1,
@@ -654,21 +651,66 @@ export default function Home() {
   const exportToXlsx = () => {
     if (!selectedEvent) return;
 
-    const rowsWithSummary: ExportRow[] = makeRows().concat(makeSummaryRows());
+    const rows = makeRows();
+    const headers: Array<keyof ExportRow> = ["번호", "이름", "금액", "인원수"];
+    const dataRows = rows.map((row) => [
+      row.번호,
+      row.이름,
+      row.금액,
+      row.인원수,
+    ]);
+    const aoa = [headers, ...dataRows];
 
-    const worksheet = XLSX.utils.json_to_sheet(rowsWithSummary);
+    const worksheet = XLSX.utils.aoa_to_sheet(aoa);
+    XLSX.utils.sheet_add_aoa(
+      worksheet,
+      [
+        ["총 금액", totals.totalAmount],
+        ["총 인원수", totals.totalPeople],
+      ],
+      { origin: "F3" },
+    );
+
+    const applyCellStyles = (rangeRef: string) => {
+      const range = XLSX.utils.decode_range(rangeRef);
+      for (let row = range.s.r; row <= range.e.r; row += 1) {
+        for (let col = range.s.c; col <= range.e.c; col += 1) {
+          const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+          const cell = worksheet[cellAddress] ?? { t: "s", v: "" };
+          cell.s = {
+            ...(cell.s ?? {}),
+            alignment: { horizontal: "center", vertical: "center" },
+            border: {
+              top: { style: "thin", color: { rgb: "CBD5E1" } },
+              bottom: { style: "thin", color: { rgb: "CBD5E1" } },
+              left: { style: "thin", color: { rgb: "CBD5E1" } },
+              right: { style: "thin", color: { rgb: "CBD5E1" } },
+            },
+          };
+          worksheet[cellAddress] = cell;
+        }
+      }
+    };
+
+    if (aoa.length > 0) {
+      applyCellStyles(`A1:D${aoa.length}`);
+    }
+    applyCellStyles("F3:G4");
+
+    const columnWidths = headers.map((key) => {
+      const headerLen = String(key).length;
+      const maxValueLen = rows.reduce(
+        (max, row) => Math.max(max, String(row[key] ?? "").length),
+        0,
+      );
+      const maxLen = Math.max(headerLen, maxValueLen);
+      return { wch: Math.min(40, maxLen * 2 + 2) };
+    });
     worksheet["!cols"] = [
-      { wch: 6 },
+      ...columnWidths,
+      { wch: 4 },
       { wch: 10 },
       { wch: 12 },
-      { wch: 14 },
-      { wch: 12 },
-      { wch: 12 },
-      { wch: 12 },
-      { wch: 10 },
-      { wch: 8 },
-      { wch: 12 },
-      { wch: 16 },
     ];
 
     const workbook = XLSX.utils.book_new();
